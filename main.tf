@@ -1,4 +1,10 @@
 ## -- Compute/main.tf
+terraform {
+  required_version = ">= 0.11.0"
+}
+###
+provider "aws" {
+}
 
 data "aws_ami" "server_ami" {
     most_recent = true
