@@ -15,3 +15,6 @@ variable "security_group" {}
 variable "subnets" {
  type = "list"
 }
+
+variable "access_key" {}
+variable "secret_key" {}
