@@ -1,12 +1,17 @@
-resource "aws_vpc" "vpc_in_pmr_module" {
-  cidr_block = "198.162.0.0/16"
 
-  tags = {
-    Name = "vpc-from-pmr-module"
-  }
+resource "aws_instance" "tf_server" {
+    count ="${var.instance_count}"
+    instance_type = "${var.instance_type}"
+    ami = "${data.aws_ami.server_ami.id}"
+    tags {
+        Name = "tf_server-${count.index+1}"
+        Owner = "Owner-Tag-${count.index+1}"
+    }
+    key_name = "${var.key_name}"
+    vpc_security_group_ids = ["${var.security_group}"]
+    subnet_id = "${element(var.subnets, count.index)}"
+    user_data = "${data.template_file.user-init.*.rendered[count.index]}"
 }
-
-
 
 data "aws_ami" "server_ami" {
     most_recent = true
@@ -31,19 +36,4 @@ data "template_file" "user-init" {
     vars {
         firewall_subnets = "${element(var.subnet_ips, count.index)}"
     }
-}
-
-
-resource "aws_instance" "tf_server" {
-    count ="${var.instance_count}"
-    instance_type = "${var.instance_type}"
-    ami = "${data.aws_ami.server_ami.id}"
-    tags {
-        Name = "tf_server-${count.index+1}"
-##        Owner = "Owner-Tag-${count.index+1}"
-    }
-    key_name = "${var.key_name}"
-    vpc_security_group_ids = ["${var.security_group}"]
-    subnet_id = "${element(var.subnets, count.index)}"
-    user_data = "${data.template_file.user-init.*.rendered[count.index]}"
 }
