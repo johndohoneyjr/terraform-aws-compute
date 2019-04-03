@@ -1,13 +1,3 @@
-## -- Compute/main.tf
-terraform {
-  required_version = ">= 0.11.0"
-}
-###
-provider "aws" {
-  access_key = "${var.aws_access_key}"
-  secret_key = "${var.aws_secret_key}"
-}
-
 data "aws_ami" "server_ami" {
     most_recent = true
     owners      = ["amazon"]
