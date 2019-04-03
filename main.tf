@@ -1,3 +1,13 @@
+resource "aws_vpc" "vpc_in_pmr_module" {
+  cidr_block = "198.162.0.0/16"
+
+  tags = {
+    Name = "vpc-from-pmr-module"
+  }
+}
+
+
+
 data "aws_ami" "server_ami" {
     most_recent = true
     owners      = ["amazon"]
